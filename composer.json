@@ -1,6 +1,6 @@
 {
-    "name": "davideperozzi/nextform-parser",
-    "description": "Parser for the nextform php library",
+    "name": "davideperozzi/nextform-config",
+    "description": "Nextform Config with Parser for the nextform php library",
     "type": "library",
     "license": "MIT",
     "authors": [
