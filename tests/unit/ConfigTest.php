@@ -8,6 +8,7 @@ use NextForm\Config\AutoConfig;
 use Nextform\Fields\InputField;
 use Nextform\Fields\AbstractField;
 use Nextform\Fields\TextareaField;
+use Nextform\Fields\FormField;
 use Nextform\Fields\FieldCollection;
 use Nextform\Fields\Validation\ValidationModel;
 
@@ -212,5 +213,15 @@ class ReaderTest extends TestCase
 		$fields = $this->getXmlConfigFields();
 
 		$this->assertEquals(3, count($fields));
+	}
+
+	/**
+	 *
+	 */
+	public function testXmlConfigRootNode() {
+		$fields = $this->getXmlConfigFields();
+
+		$this->assertTrue($fields->getRoot() instanceof FormField);
+		$this->assertEquals('test.php', $fields->getRoot()->getAttribute('action'));
 	}
 }

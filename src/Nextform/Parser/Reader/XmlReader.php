@@ -52,6 +52,14 @@ class XmlReader extends AbstractReader
 	 */
 	private function read() {
 		$defaultErrors = [];
+		$rootField = $this->fieldFactory->createField($this->xmlElement->getName());
+
+		// Read form field (root)
+		foreach ($this->xmlElement->attributes() as $name => $value) {
+			$rootField->setAttribute($name, (string) $value);
+		}
+
+		$this->fields[] = $rootField;
 
 		// Read defaults
 		if (property_exists($this->xmlElement, static::DEFAULTS_KEY)) {

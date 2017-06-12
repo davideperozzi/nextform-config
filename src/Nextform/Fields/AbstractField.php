@@ -5,6 +5,11 @@ namespace Nextform\Fields;
 abstract class AbstractField
 {
 	/**
+	 * @var boolean
+	 */
+	public static $root = false;
+
+	/**
 	 * @var string
 	 */
 	public static $tag = '';

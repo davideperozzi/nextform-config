@@ -15,7 +15,8 @@ class FieldFactory
 	private $fieldCtors = [
 		'Nextform\Fields\InputField',
 		'Nextform\Fields\SelectField',
-		'Nextform\Fields\TextareaField'
+		'Nextform\Fields\TextareaField',
+		'Nextform\Fields\FormField'
 	];
 
 	/**

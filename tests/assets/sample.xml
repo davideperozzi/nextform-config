@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf8" ?>
-<form action="test.php" novalidate="true">
+<form  name="sample" action="test.php" novalidate="true">
 	<input type="text" name="firstname">
 		<validation required="true" minlength="3">
 			<errors>
