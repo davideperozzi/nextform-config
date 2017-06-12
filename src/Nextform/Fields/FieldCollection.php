@@ -2,7 +2,7 @@
 
 namespace Nextform\Fields;
 
-class FieldCollection
+class FieldCollection implements Traversable
 {
 	/**
 	 * @var array
@@ -34,6 +34,20 @@ class FieldCollection
 				$this->nameMap[$name] = $field;
 			}
 		}
+	}
+
+	/**
+	 * @return integer
+	 */
+	public function count() {
+		return count($this->fields);
+	}
+
+	/**
+	 * @return \ArrayIterator
+	 */
+	public function getIterator() {
+		return new \ArrayIterator($this->fields);
 	}
 
 	/**

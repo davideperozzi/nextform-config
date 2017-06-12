@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Nextform\Config\XmlConfig;
 use NextForm\Config\AutoConfig;
 use Nextform\Fields\InputField;
+use Nextform\Fields\AbstractField;
 use Nextform\Fields\TextareaField;
 use Nextform\Fields\FieldCollection;
 use Nextform\Fields\Validation\ValidationModel;
@@ -191,5 +192,25 @@ class ReaderTest extends TestCase
 			'Too short. ' . $firstnameValidation->value . ' characters at least',
 			$firstnameValidation->error
 		);
+	}
+
+	/**
+	 *
+	 */
+	public function testXmlConfigTraversable() {
+		$fields = $this->getXmlConfigFields();
+
+		foreach ($fields as $field) {
+			$this->assertTrue($field instanceof AbstractField);
+		}
+	}
+
+	/**
+	 *
+	 */
+	public function testXmlConfigCountable() {
+		$fields = $this->getXmlConfigFields();
+
+		$this->assertEquals(3, count($fields));
 	}
 }
