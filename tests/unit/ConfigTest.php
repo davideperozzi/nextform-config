@@ -19,6 +19,7 @@ class ReaderTest extends TestCase
 	 */
 	protected function setUp() {
 		$this->validXmlFile = realpath(__DIR__ . '/../assets/sample.xml');
+		$this->validXmlFileSelect = realpath(__DIR__ . '/../assets/select.xml');
 		$this->invalidXmlFile = realpath(__DIR__ . '/../assets/invalidfile.xml');
 		$this->invalidXmlExtensionFile = realpath(__DIR__ . '/../assets/sample.fml');
 		$this->nonExistentXmlFile = '../assets/nonexitence.xml';
@@ -223,5 +224,44 @@ class ReaderTest extends TestCase
 
 		$this->assertTrue($fields->getRoot() instanceof FormField);
 		$this->assertEquals('test.php', $fields->getRoot()->getAttribute('action'));
+	}
+
+	/**
+	 *
+	 */
+	public function testXmlConfigYieldChildrenLayerOne() {
+		$xmlConfig = new XmlConfig($this->validXmlFileSelect);
+		$xmlFields = $xmlConfig->getFields();
+		$selectField = $xmlFields->get('gender');
+
+		$this->assertTrue(is_array($selectField->getChildren()));
+		$this->assertTrue(count($selectField->getChildren()) > 1);
+		$this->assertTrue($selectField->hasChildren());
+	}
+
+	/**
+	 *
+	 */
+	public function testXmlConfigYieldChildrenLayerOneContent() {
+		$xmlConfig = new XmlConfig($this->validXmlFileSelect);
+		$xmlFields = $xmlConfig->getFields();
+		$selectField = $xmlFields->get('price');
+
+		foreach ($selectField->getChildren() as $child) {
+			$this->assertTrue( ! empty($child->getContent()));
+		}
+	}
+
+	/**
+	 *
+	 */
+	public function testXmlConfigYieldChildrenLayerOneAttribute() {
+		$xmlConfig = new XmlConfig($this->validXmlFileSelect);
+		$xmlFields = $xmlConfig->getFields();
+		$selectField = $xmlFields->get('price');
+
+		foreach ($selectField->getChildren() as $child) {
+			$this->assertTrue( ! empty($child->getAttribute('key')));
+		}
 	}
 }

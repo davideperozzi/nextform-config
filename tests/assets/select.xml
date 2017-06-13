@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf8" ?>
+<form  name="sample" action="test.php" novalidate="true">
+	<input type="text" name="firstname">
+		<validation required="true" minlength="3">
+			<errors>
+				<minlength>Too short. %s characters at least</minlength>
+			</errors>
+		</validation>
+	</input>
+	<select name="gender">
+		<options>
+			<option key="g1">Gender 1</option>
+			<option key="g2" selected="true">Gender 2</option>
+			<option key="g3">Gender 3</option>
+		</options>
+		<validation></validation>
+	</select>
+	<select name="price">
+		<options>
+			<option key="p1">Price 1</option>
+			<option key="p2" selected="true">Price 2</option>
+			<option key="p3">Price 3</option>
+		</options>
+	</select>
+	<defaults>
+		<validation>
+			<errors>
+				<required>This field is required</required>
+				<maxlength>Default maxlength error</maxlength>
+			</errors>
+		</validation>
+	</defaults>
+</form>

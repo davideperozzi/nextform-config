@@ -16,6 +16,7 @@ class FieldFactory
 		'Nextform\Fields\InputField',
 		'Nextform\Fields\SelectField',
 		'Nextform\Fields\TextareaField',
+		'Nextform\Fields\OptionField',
 		'Nextform\Fields\FormField'
 	];
 

@@ -10,9 +10,24 @@ abstract class AbstractField
 	public static $root = false;
 
 	/**
+	 * @var boolean
+	 */
+	public static $yield = [];
+
+	/**
 	 * @var string
 	 */
 	public static $tag = '';
+
+	/**
+	 * @var string
+	 */
+	protected $content = '';
+
+	/**
+	 * @var array
+	 */
+	protected $children = [];
 
 	/**
 	 * @var array
@@ -47,6 +62,20 @@ abstract class AbstractField
 	}
 
 	/**
+	 * @param AbstractField $field
+	 */
+	public function addChild(&$field) {
+		$this->children[] = $field;
+	}
+
+	/**
+	 * @param string $content
+	 */
+	public function setContent($content) {
+		$this->content = $content;
+	}
+
+	/**
 	 * @param string $name
 	 * @return array|Validation\ErrorModel
 	 */
@@ -69,6 +98,34 @@ abstract class AbstractField
 	 */
 	public function getAttributes() {
 		return $this->attributes;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getChildren() {
+		return $this->children;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getContnet() {
+		return $this->content;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getContent() {
+		return $this->content;
+	}
+
+	/**
+	 * @return boolean
+	 */
+	public function hasChildren() {
+		return count($this->children) > 0;
 	}
 
 	/**
