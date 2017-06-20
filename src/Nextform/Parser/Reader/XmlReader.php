@@ -51,7 +51,7 @@ class XmlReader extends AbstractReader
 	 * @param AbstractField $field
 	 * @param \SimpleXMLElement $element
 	 */
-	private function yield(&$field, &$element) {
+	private function yieldElements(&$field, &$element) {
 		foreach ($field::$yield as $base => $ctor) {
 			if (property_exists($element, $base)) {
 				foreach ($element->{$base}->children() as $child) {
@@ -81,7 +81,7 @@ class XmlReader extends AbstractReader
 			}
 
 			if ( ! empty($field::$yield)) {
-				$this->yield($field, $element);
+				$this->yieldElements($field, $element);
 			}
 
 			if ( ! is_null($parent)) {
