@@ -17,7 +17,7 @@ class FieldCollection implements Traversable
 	/**
 	 * @var array
 	 */
-	private $nameMap = [];
+	private $idMap = [];
 
 	/**
 	 * @param array $fields
@@ -39,17 +39,13 @@ class FieldCollection implements Traversable
 				}
 			}
 
-			if ($field->hasAttribute('name')) {
-				$name = $field->getAttribute('name');
-
-				if (array_key_exists($name, $this->nameMap)) {
-					throw new Exception\DuplicateFieldException(
-						sprintf('Field "%s" already defined', $name)
-					);
-				}
-
-				$this->nameMap[$name] = $field;
+			if (array_key_exists($field->id, $this->idMap)) {
+				throw new Exception\DuplicateFieldException(
+					sprintf('Field "%s" already defined', $field->id)
+				);
 			}
+
+			$this->idMap[$field->id] = $field;
 		}
 
 		// Handle root as seperated field
@@ -83,20 +79,20 @@ class FieldCollection implements Traversable
 	}
 
 	/**
-	 * @param string $name
+	 * @param string $id
 	 * @return boolean
 	 */
-	public function has($name) {
-		return array_key_exists($name, $this->nameMap);
+	public function has($id) {
+		return array_key_exists($id, $this->idMap);
 	}
 
 	/**
-	 * @param string $name
+	 * @param string $id
 	 * @return AbstractField
 	 */
-	public function get($name) {
-		if ($this->has($name)) {
-			return $this->nameMap[$name];
+	public function get($id) {
+		if ($this->has($id)) {
+			return $this->idMap[$id];
 		}
 
 		return null;

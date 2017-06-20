@@ -5,6 +5,16 @@ namespace Nextform\Fields;
 abstract class AbstractField
 {
 	/**
+	 * @var string
+	 */
+	const UID_PREFIX = 'field_';
+
+	/**
+	 * @var string
+	 */
+	const UID_ATTRIBUTE = 'name';
+
+	/**
 	 * @var boolean
 	 */
 	public static $root = false;
@@ -18,6 +28,16 @@ abstract class AbstractField
 	 * @var string
 	 */
 	public static $tag = '';
+
+	/**
+	 * @var integer
+	 */
+	protected static $counter = 0;
+
+	/**
+	 * @var string
+	 */
+	public $id = '';
 
 	/**
 	 * @var string
@@ -40,11 +60,31 @@ abstract class AbstractField
 	protected $validation = [];
 
 	/**
+	 *
+	 */
+	public function __construct() {
+		static::$counter++;
+
+		$this->id = static::generateUid();
+	}
+
+	/**
+	 * @return string
+	 */
+	private static function generateUid() {
+		return AbstractField::UID_PREFIX . static::$counter;
+	}
+
+	/**
 	 * @param string $name
 	 * @param string $value
 	 */
 	public function setAttribute($name, $value) {
 		$this->attributes[$name] = $value;
+
+		if ($name == AbstractField::UID_ATTRIBUTE) {
+			$this->id = $value;
+		}
 	}
 
 	/**
