@@ -2,7 +2,7 @@
 
 namespace Nextform\Fields\Validation;
 
-class ValidationModel
+class ValidationModel implements \JsonSerializable
 {
 	/**
 	 * @var string
@@ -26,5 +26,16 @@ class ValidationModel
 	public function __construct($name, $value = '') {
 		$this->name = $name;
 		$this->value = $value;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function jsonSerialize() {
+		return [
+			'name' => $this->name,
+			'value' => $this->value,
+			'error' => (string) $this->error
+		];
 	}
 }
