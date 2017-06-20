@@ -12,7 +12,7 @@ use Nextform\Fields\FormField;
 use Nextform\Fields\FieldCollection;
 use Nextform\Fields\Validation\ValidationModel;
 
-class ReaderTest extends TestCase
+class ConfigTest extends TestCase
 {
 	/**
 	 *
