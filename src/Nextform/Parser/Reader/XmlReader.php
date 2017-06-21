@@ -201,6 +201,7 @@ class XmlReader extends AbstractReader
 						foreach ($connectionsElement->attributes() as $name => $value) {
 							$error = '';
 							$action = '';
+							$value = (string) $value;
 
 							if (array_key_exists($name, $connectionErrors)) {
 								$error = $connectionErrors[$name];
@@ -213,7 +214,17 @@ class XmlReader extends AbstractReader
 								$action = $connectionActions[$name];
 							}
 
-							$field->addConnectedValidation($name, (string) $value, $action, $error);
+							if (preg_match('/^(.*)' . static::VALIDATION_CONNECTIONS_ACTION_SEPERATOR . '(.*)$/', $value, $matches)) {
+								if (array_key_exists(1, $matches)) {
+									$action = $matches[1];
+								}
+
+								if (array_key_exists(2, $matches)) {
+									$value = $matches[2];
+								}
+							}
+
+							$field->addConnectedValidation($name, $value, $action, $error);
 						}
 					}
 				}

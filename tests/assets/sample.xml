@@ -2,8 +2,8 @@
 <form  name="sample" action="test.php" novalidate="true">
 	<input type="text" name="firstname">
 		<validation required="true" minlength="3">
-			<connections equals="lastname" maxlength="description">
-				<actions equals="content" maxlength="validate" />
+			<connections equals="content:lastname" maxlength="description">
+				<actions maxlength="validate" />
 			</connections>
 			<errors>
 				<minlength>Too short. %s characters at least</minlength>
