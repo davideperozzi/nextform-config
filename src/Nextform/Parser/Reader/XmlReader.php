@@ -102,6 +102,7 @@ class XmlReader extends AbstractReader
 	 */
 	private function read() {
 		$defaultErrors = [];
+		$defaultConnectionErrors = [];
 
 		// Read form field (root)
 		$this->readElement($this->xmlElement);
@@ -113,10 +114,23 @@ class XmlReader extends AbstractReader
 			foreach ($defaults->children() as $name => $child) {
 				if ($name == static::VALIDATION_KEY) {
 					if (array_key_exists(static::VALIDATION_ERRORS_KEY, $child)) {
-						$errors = $child->{static::VALIDATION_ERRORS_KEY};
+						$errorElement = $child->{static::VALIDATION_ERRORS_KEY};
 
-						foreach ($errors->children() as $name => $error) {
-							$defaultErrors[$name] = (string) $error;
+						foreach ($errorElement->children() as $name => $error) {
+							if ($error->count() == 0) {
+								$defaultErrors[$name] = (string) $error;
+							}
+						}
+
+						// Default errors for connection validation
+						if (property_exists($errorElement, static::VALIDATION_CONNECTIONS_KEY)) {
+							$connectionsErrorElement = $errorElement->{static::VALIDATION_CONNECTIONS_KEY};
+
+							foreach ($connectionsErrorElement->children() as $name => $error) {
+								if ($error->count() == 0) {
+									$defaultConnectionErrors[$name] = (string) $error;
+								}
+							}
 						}
 					}
 				}
@@ -130,6 +144,7 @@ class XmlReader extends AbstractReader
 			if ( ! is_null($field)) {
 				if (property_exists($element, static::VALIDATION_KEY)) {
 					$validationElement = $element->{static::VALIDATION_KEY};
+					$connectionErrors = [];
 					$errors = [];
 
 					// Validation errors
@@ -137,7 +152,20 @@ class XmlReader extends AbstractReader
 						$errorElement = $validationElement->{static::VALIDATION_ERRORS_KEY};
 
 						foreach ($errorElement->children() as $name => $error) {
-							$errors[$name] = (string) $error;
+							if ($error->count() == 0) {
+								$errors[$name] = (string) $error;
+							}
+						}
+
+						// Errors for connection validation
+						if (property_exists($errorElement, static::VALIDATION_CONNECTIONS_KEY)) {
+							$connectionsErrorElement = $errorElement->{static::VALIDATION_CONNECTIONS_KEY};
+
+							foreach ($connectionsErrorElement->children() as $name => $error) {
+								if ($error->count() == 0) {
+									$connectionErrors[$name] = (string) $error;
+								}
+							}
 						}
 					}
 
@@ -153,6 +181,40 @@ class XmlReader extends AbstractReader
 						}
 
 						$field->addValidation($name, (string) $value, $error);
+					}
+
+					// Validation connections
+					if (property_exists($validationElement, static::VALIDATION_CONNECTIONS_KEY)) {
+						$connectionsElement = $validationElement->{static::VALIDATION_CONNECTIONS_KEY};
+						$connectionActions = [];
+
+						if ($connectionsElement->count() > 0) {
+							foreach ($connectionsElement->children() as $child) {
+								if ($child->getName() == static::VALIDATION_CONNECTIONS_ACTIONS_KEY) {
+									foreach ($child->attributes() as $name => $value) {
+										$connectionActions[$name] = (string) $value;
+									}
+								}
+							}
+						}
+
+						foreach ($connectionsElement->attributes() as $name => $value) {
+							$error = '';
+							$action = '';
+
+							if (array_key_exists($name, $connectionErrors)) {
+								$error = $connectionErrors[$name];
+							}
+							else if (array_key_exists($name, $defaultConnectionErrors)) {
+								$error = $defaultConnectionErrors[$name];
+							}
+
+							if (array_key_exists($name, $connectionActions)) {
+								$action = $connectionActions[$name];
+							}
+
+							$field->addConnectedValidation($name, (string) $value, $action, $error);
+						}
 					}
 				}
 			}

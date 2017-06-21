@@ -199,6 +199,47 @@ class ConfigTest extends TestCase
 	/**
 	 *
 	 */
+	public function testXmlConfigConnectedField() {
+		$fields = $this->getXmlConfigFields();
+		$firstname = $fields->get('firstname');
+		$connectionCounter = 0;
+
+		foreach ($firstname->getValidation() as $validation) {
+			if ($validation->hasConnection()) {
+				$connectionCounter++;
+			}
+		}
+
+		$this->assertEquals($connectionCounter, 2);
+	}
+
+	/**
+	 *
+	 */
+	public function testXmlConfigConnectedFieldValues() {
+		$fields = $this->getXmlConfigFields();
+		$firstname = $fields->get('firstname');
+
+		foreach ($firstname->getValidation() as $validation) {
+			if ($validation->hasConnection()) {
+				if ($validation->name == 'equals') {
+					$this->assertEquals($validation->error, 'Firstname does not match the lastname');
+					$this->assertEquals($validation->value, 'lastname');
+					$this->assertEquals($validation->connection->action, 'content');
+				}
+
+				if ($validation->name == 'maxlength') {
+					$this->assertEquals($validation->error, 'The maxlength doesn\'t match');
+					$this->assertEquals($validation->value, 'description');
+					$this->assertEquals($validation->connection->action, 'validate');
+				}
+			}
+		}
+	}
+
+	/**
+	 *
+	 */
 	public function testXmlConfigTraversable() {
 		$fields = $this->getXmlConfigFields();
 

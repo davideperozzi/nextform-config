@@ -90,15 +90,33 @@ abstract class AbstractField
 	/**
 	 * @param string $name
 	 * @param string $value
+	 * @param string $error
+	 * @return Validation\ErrorModel
 	 */
 	public function addValidation($name, $value, $error = '') {
 		$model = new Validation\ValidationModel($name, $value);
 
-		if (!empty($error)) {
+		if ( ! empty($error)) {
 			$model->error = new Validation\ErrorModel(sprintf($error, $value));
 		}
 
 		$this->validation[] = $model;
+
+		return $model;
+	}
+
+	/**
+	 * @param string $name
+	 * @param string $value
+	 * @param string $action
+	 * @param string $error
+	 * @return Validation\ErrorModel
+	 */
+	public function addConnectedValidation($name, $value, $action = '', $error = '') {
+		$model = $this->addValidation($name, $value, $error);
+		$model->connection = new Validation\ConnectionModel($action);
+
+		return $model;
 	}
 
 	/**

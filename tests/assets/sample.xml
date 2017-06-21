@@ -2,8 +2,14 @@
 <form  name="sample" action="test.php" novalidate="true">
 	<input type="text" name="firstname">
 		<validation required="true" minlength="3">
+			<connections equals="lastname" maxlength="description">
+				<actions equals="content" maxlength="validate" />
+			</connections>
 			<errors>
 				<minlength>Too short. %s characters at least</minlength>
+				<connections>
+					<equals>Firstname does not match the lastname</equals>
+				</connections>
 			</errors>
 		</validation>
 	</input>
@@ -27,6 +33,9 @@
 			<errors>
 				<required>This field is required</required>
 				<maxlength>Default maxlength error</maxlength>
+				<connections>
+					<maxlength>The maxlength doesn't match</maxlength>
+				</connections>
 			</errors>
 		</validation>
 	</defaults>

@@ -19,6 +19,16 @@ abstract class AbstractReader
 	/**
 	 * @var string
 	 */
+	const VALIDATION_CONNECTIONS_KEY = 'connections';
+
+	/**
+	 * @var string
+	 */
+	const VALIDATION_CONNECTIONS_ACTIONS_KEY = 'actions';
+
+	/**
+	 * @var string
+	 */
 	const DEFAULTS_KEY = 'defaults';
 
 	/**
