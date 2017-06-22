@@ -10,7 +10,7 @@
 			</errors>
 		</validation>
 	</collection>
-	<collection array="[sample][]">
+	<collection name="test2" array="[sample][]">
 		<input type="text" name="test" />
 	</collection>
 </form>

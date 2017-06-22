@@ -327,4 +327,22 @@ class ConfigTest extends TestCase
 			$this->assertEquals($child->id, 'test' . AbstractField::UID_SEPERATOR . $i);
 		}
 	}
+
+	/**
+	 *
+	 */
+	public function testXmlConfigArrayStructure() {
+		$xmlConfig = new XmlConfig($this->validXmlFileArrays);
+		$xmlFields = $xmlConfig->getFields();
+		$collection = $xmlFields->get('test2');
+
+		$this->assertEquals(
+			$collection->getArrayStructure(),
+			[
+				'sample' => [
+					0 => []
+				]
+			]
+		);
+	}
 }

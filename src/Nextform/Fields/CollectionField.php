@@ -42,4 +42,24 @@ class CollectionField extends AbstractField
 
 		parent::addChild($child);
 	}
+
+	/**
+	 * @return array
+	 */
+	public function getArrayStructure() {
+		preg_match_all('/\[(.*?)\]/', $this->getAttribute('array'), $matches);
+
+		$keys = $matches[1];
+		$arr = [];
+
+		for($i = count($keys) - 1; $i >= 0; $i--) {
+			if (empty(trim($keys[$i]))) {
+				$keys[$i] = 0;
+			}
+
+		    $arr = [$keys[$i] => $arr];
+		}
+
+		return $arr;
+	}
 }
