@@ -6,10 +6,11 @@ use PHPUnit\Framework\TestCase;
 use Nextform\Config\XmlConfig;
 use NextForm\Config\AutoConfig;
 use Nextform\Fields\InputField;
+use Nextform\Fields\CollectionField;
 use Nextform\Fields\AbstractField;
 use Nextform\Fields\TextareaField;
 use Nextform\Fields\FormField;
-use Nextform\Fields\FieldCollection;
+use Nextform\Parser\FieldCollection;
 use Nextform\Fields\Validation\ValidationModel;
 
 class ConfigTest extends TestCase
@@ -20,6 +21,7 @@ class ConfigTest extends TestCase
 	protected function setUp() {
 		$this->validXmlFile = realpath(__DIR__ . '/../assets/sample.xml');
 		$this->validXmlFileSelect = realpath(__DIR__ . '/../assets/select.xml');
+		$this->validXmlFileArrays = realpath(__DIR__ . '/../assets/arrays.xml');
 		$this->invalidXmlFile = realpath(__DIR__ . '/../assets/invalidfile.xml');
 		$this->invalidXmlExtensionFile = realpath(__DIR__ . '/../assets/sample.fml');
 		$this->nonExistentXmlFile = '../assets/nonexitence.xml';
@@ -303,6 +305,26 @@ class ConfigTest extends TestCase
 
 		foreach ($selectField->getChildren() as $child) {
 			$this->assertTrue( ! empty($child->getAttribute('key')));
+		}
+	}
+
+	/**
+	 *
+	 */
+	public function testXmlConfigArrayField() {
+		$xmlConfig = new XmlConfig($this->validXmlFileArrays);
+		$xmlFields = $xmlConfig->getFields();
+		$collection = $xmlFields->get('test');
+		$validation = $collection->getValidation();
+
+		$this->assertInstanceOf(CollectionField::class, $collection);
+		$this->assertEquals($collection->countChildren(), 3);
+		$this->assertEquals(count($validation), 1);
+		$this->assertEquals($validation[0]->name, 'required');
+		$this->assertEquals($validation[0]->error, 'Please select at least one checkbox');
+
+		foreach ($collection->getChildren() as $i => $child) {
+			$this->assertEquals($child->id, 'test' . AbstractField::UID_SEPERATOR . $i);
 		}
 	}
 }

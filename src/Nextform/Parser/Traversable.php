@@ -1,6 +1,6 @@
 <?php
 
-namespace Nextform\Fields;
+namespace Nextform\Parser;
 
 interface Traversable extends \Traversable, \Countable, \IteratorAggregate
 {

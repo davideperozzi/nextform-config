@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf8" ?>
+<form name="sample" action="test.php" novalidate="true">
+	<collection name="test" array="[]">
+		<input type="checkbox" name="test" value="test1" />
+		<input type="checkbox" name="test" value="test2" />
+		<input type="checkbox" name="test" value="test3" />
+		<validation required="1">
+			<errors>
+				<required>Please select at least one checkbox</required>
+			</errors>
+		</validation>
+	</collection>
+	<collection array="[sample][]">
+		<input type="text" name="test" />
+	</collection>
+</form>

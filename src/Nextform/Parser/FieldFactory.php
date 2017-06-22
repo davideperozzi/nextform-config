@@ -17,7 +17,8 @@ class FieldFactory
 		'Nextform\Fields\SelectField',
 		'Nextform\Fields\TextareaField',
 		'Nextform\Fields\OptionField',
-		'Nextform\Fields\FormField'
+		'Nextform\Fields\FormField',
+		'Nextform\Fields\CollectionField'
 	];
 
 	/**

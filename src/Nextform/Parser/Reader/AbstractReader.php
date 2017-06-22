@@ -34,6 +34,11 @@ abstract class AbstractReader
 	/**
 	 * @var string
 	 */
+	const COLLECTION_KEY = 'collection';
+
+	/**
+	 * @var string
+	 */
 	const DEFAULTS_KEY = 'defaults';
 
 	/**

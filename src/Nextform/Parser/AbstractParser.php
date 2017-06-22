@@ -2,8 +2,6 @@
 
 namespace Nextform\Parser;
 
-use Nextform\Parser\FieldFactory;
-use Nextform\Fields\FieldCollection;
 use Nextform\Parser\Exception\LogicException;
 use Nextform\Parser\Reader\AbstractReader;
 

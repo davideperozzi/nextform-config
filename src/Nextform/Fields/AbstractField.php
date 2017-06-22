@@ -4,10 +4,12 @@ namespace Nextform\Fields;
 
 abstract class AbstractField
 {
+	const UID_SEPERATOR = '_';
+
 	/**
 	 * @var string
 	 */
-	const UID_PREFIX = 'field_';
+	const UID_PREFIX = 'field' . self::UID_SEPERATOR;
 
 	/**
 	 * @var string
@@ -18,6 +20,11 @@ abstract class AbstractField
 	 * @var boolean
 	 */
 	public static $root = false;
+
+	/**
+	 * @var boolean
+	 */
+	public static $wrapper = false;
 
 	/**
 	 * @var boolean
@@ -163,6 +170,13 @@ abstract class AbstractField
 	 */
 	public function getChildren() {
 		return $this->children;
+	}
+
+	/**
+	 * @return number
+	 */
+	public function countChildren() {
+		return count($this->children);
 	}
 
 	/**
