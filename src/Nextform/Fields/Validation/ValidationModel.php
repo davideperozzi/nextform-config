@@ -20,6 +20,11 @@ class ValidationModel implements \JsonSerializable
 	public $error = null;
 
 	/**
+	 * @var array
+	 */
+	public $modifiers = [];
+
+	/**
 	 * @var ConnectionModel
 	 */
 	public $connection = null;
@@ -33,6 +38,14 @@ class ValidationModel implements \JsonSerializable
 		$this->name = $name;
 		$this->value = $value;
 		$this->connection = $connection;
+	}
+
+	/**
+	 * @param string $name
+	 * @param mixed $value
+	 */
+	public function addModifier($name, $value) {
+		$this->modifiers[$name] = $value;
 	}
 
 	/**

@@ -345,4 +345,17 @@ class ConfigTest extends TestCase
 			]
 		);
 	}
+
+	/**
+	 *
+	 */
+	public function testXmlConfigArrayModifier() {
+		$xmlConfig = new XmlConfig($this->validXmlFileArrays);
+		$xmlFields = $xmlConfig->getFields();
+		$collection = $xmlFields->get('test');
+		$validations = $collection->getValidation();
+
+		$this->assertTrue(array_key_exists('min', $validations[0]->modifiers));
+		$this->assertEquals($validations[0]->modifiers['min'], '2');
+	}
 }

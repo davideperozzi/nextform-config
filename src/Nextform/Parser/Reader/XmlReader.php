@@ -123,6 +123,9 @@ class XmlReader extends AbstractReader
 	private function parseValidation(&$field, &$element) {
 		if (property_exists($element, static::VALIDATION_KEY)) {
 			$validationElement = $element->{static::VALIDATION_KEY};
+			$modifiersElement = property_exists($validationElement, static::VALIDATION_MODIFIERS_KEY)
+								? $validationElement->{static::VALIDATION_MODIFIERS_KEY}
+								: null;
 			$errorElement = property_exists($validationElement, static::VALIDATION_ERRORS_KEY)
 								? $validationElement->{static::VALIDATION_ERRORS_KEY}
 								: null;
@@ -130,6 +133,7 @@ class XmlReader extends AbstractReader
 			foreach ($validationElement->attributes() as $name => $value) {
 				$error = '';
 
+				// Search error
 				if ($errorElement && property_exists($errorElement, $name)) {
 					$error = (string) $errorElement->{$name};
 				}
@@ -137,7 +141,20 @@ class XmlReader extends AbstractReader
 					$error = $this->defaultErrors[$name];
 				}
 
-				$field->addValidation($name, (string) $value, $error);
+				$validation = $field->addValidation($name, (string) $value, $error);
+
+				// Search modifiers
+				if ($modifiersElement) {
+					foreach ($modifiersElement->attributes() as $modifier => $modifierVal) {
+						$startName = $validation->name . static::VALIDATION_MODIFIER_SEPERATOR;
+
+						if (substr($modifier, 0, strlen($startName)) == $startName) {
+							$modifierName = substr($modifier, strlen($startName) - strlen($modifier));
+
+							$validation->addModifier($modifierName, (string) $modifierVal);
+						}
+					}
+				}
 			}
 
 			// Read connections

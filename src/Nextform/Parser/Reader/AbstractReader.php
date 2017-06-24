@@ -14,6 +14,11 @@ abstract class AbstractReader
 	/**
 	 * @var string
 	 */
+	const VALIDATION_MODIFIERS_KEY = 'modifiers';
+
+	/**
+	 * @var string
+	 */
 	const VALIDATION_ERRORS_KEY = 'errors';
 
 	/**
@@ -30,6 +35,11 @@ abstract class AbstractReader
 	 * @var string
 	 */
 	const VALIDATION_CONNECTIONS_ACTION_SEPERATOR = ':';
+
+	/**
+	 * @var string
+	 */
+	const VALIDATION_MODIFIER_SEPERATOR = '-';
 
 	/**
 	 * @var string

@@ -98,7 +98,7 @@ abstract class AbstractField
 	 * @param string $name
 	 * @param string $value
 	 * @param string $error
-	 * @return Validation\ErrorModel
+	 * @return Validation\ValidationModel
 	 */
 	public function addValidation($name, $value, $error = '') {
 		$model = new Validation\ValidationModel($name, $value);
@@ -117,7 +117,7 @@ abstract class AbstractField
 	 * @param string $value
 	 * @param string $action
 	 * @param string $error
-	 * @return Validation\ErrorModel
+	 * @return Validation\ValidationModel
 	 */
 	public function addConnectedValidation($name, $value, $action = '', $error = '') {
 		$model = $this->addValidation($name, $value, $error);

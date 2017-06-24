@@ -4,7 +4,8 @@
 		<input type="checkbox" name="test" value="test1" />
 		<input type="checkbox" name="test" value="test2" />
 		<input type="checkbox" name="test" value="test3" />
-		<validation required="1">
+		<validation required="true">
+			<modifiers required-min="2" />
 			<errors>
 				<required>Please select at least one checkbox</required>
 			</errors>
