@@ -76,6 +76,11 @@ abstract class AbstractField
 	}
 
 	/**
+	 *
+	 */
+	public function ready() {}
+
+	/**
 	 * @return string
 	 */
 	private static function generateUid() {

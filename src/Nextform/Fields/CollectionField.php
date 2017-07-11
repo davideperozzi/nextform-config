@@ -15,6 +15,22 @@ class CollectionField extends AbstractField
 	public static $wrapper = true;
 
 	/**
+	 *
+	 */
+	public function ready() {
+		if ( ! $this->hasAttribute('array')) {
+			throw new Exception\AttributeNotFoundException(
+				'The collection field needs a array destination for the subfields'
+			);
+		}
+		else if (empty(trim($this->getAttribute('array')))) {
+			throw new Exception\InvalidArrayDestinationException(
+				'The collection field needs a valid array destination'
+			);
+		}
+	}
+
+	/**
 	 * @param AbstractField &$child
 	 */
 	public function addChild(&$child) {
@@ -28,13 +44,11 @@ class CollectionField extends AbstractField
 		$oldId = $child->id;
 
 		// Append array to name attribute
-		if ($this->hasAttribute('array')) {
-			if ($child->hasAttribute('name')) {
-				$name = $child->getAttribute('name');
-				$array = $this->getAttribute('array');
+		if ($child->hasAttribute('name')) {
+			$name = $child->getAttribute('name');
+			$array = $this->getAttribute('array');
 
-				$child->setAttribute('name', $name . $array);
-			}
+			$child->setAttribute('name', $name . $array);
 		}
 
 		// Update child id to make it unique again

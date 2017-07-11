@@ -109,6 +109,8 @@ class XmlReader extends AbstractReader
 				$this->fields[] = $field;
 			}
 
+			$field->ready();
+
 			return $field;
 		}
 

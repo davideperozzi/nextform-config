@@ -358,4 +358,28 @@ class ConfigTest extends TestCase
 		$this->assertTrue(array_key_exists('min', $validations[0]->modifiers));
 		$this->assertEquals($validations[0]->modifiers['min'], '2');
 	}
+
+	/**
+	 * @expectedException Nextform\Fields\Exception\AttributeNotFoundException
+     * @expectedExceptionMessage The collection field needs a array destination for the subfields
+	 */
+	public function testXmlConfigUndefinedCollectionFieldArrayDefinition() {
+		$xmlConig = new XmlConfig('
+			<form name="test">
+				<collection></collection>
+			</form>
+		', true);
+	}
+
+	/**
+	 * @expectedException Nextform\Fields\Exception\InvalidArrayDestinationException
+     * @expectedExceptionMessage The collection field needs a valid array destination
+	 */
+	public function testXmlConfigInvalidCollectionFieldArrayDefinition() {
+		$xmlConig = new XmlConfig('
+			<form name="test">
+				<collection array=""></collection>
+			</form>
+		', true);
+	}
 }
