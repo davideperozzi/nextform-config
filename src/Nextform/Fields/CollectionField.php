@@ -33,7 +33,7 @@ class CollectionField extends AbstractField
 	/**
 	 * @param AbstractField &$child
 	 */
-	// public function addChild(&$child) {
+	public function addChild(&$child) {
 		// $count = count(array_map(
 		// 	function($field){
 		// 		return $field->id;
@@ -54,13 +54,36 @@ class CollectionField extends AbstractField
 		// // Update child id to make it unique again
 		// $child->id = $oldId . self::UID_SEPERATOR . $count;
 
-		// parent::addChild($child);
-	// }
+		if ( ! $this->hasAttribute('name')) {
+			throw new Exception\AttributeNotFoundException('Every collection needs a name');
+		}
+
+		$collectionName = $this->getAttribute('name');
+
+		if ( ! $child->hasAttribute('name')) {
+			throw new Exception\AttributeNotFoundException('Every collection child needs a name');
+		}
+		else {
+			$name = explode('[', $child->getAttribute('name'));
+
+			if ($name[0] != $collectionName) {
+				throw new Exception\InvalidCollectionChildName(
+					sprintf(
+						'Every child name of a collection needs to start with the name of the corresponding collection. This is required to match a certain validation input to the validator. Found field "%s" in collection "%s"',
+						$name[0],
+						$collectionName
+					)
+				);
+			}
+		}
+
+		parent::addChild($child);
+	}
 
 	/**
 	 * @return array
 	 */
-	public function getArrayStructure() {
+	// public function getArrayStructure() {
 		// preg_match_all('/\[(.*?)\]/', $this->getAttribute('array'), $matches);
 
 		// $keys = $matches[1];
@@ -75,5 +98,5 @@ class CollectionField extends AbstractField
 		// }
 
 		// return $arr;
-	}
+	// }
 }

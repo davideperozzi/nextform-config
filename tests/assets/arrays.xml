@@ -11,7 +11,7 @@
 			</errors>
 		</validation>
 	</collection> -->
-	<collection name="test2">
+	<collection name="test">
 		<input type="text" name="test[sample][]" />
 		<input type="text" name="test[sample][]" />
 		<input type="text" name="test[sample][]" />
