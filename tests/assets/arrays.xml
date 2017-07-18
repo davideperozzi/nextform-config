@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf8" ?>
 <form name="sample" action="test.php" novalidate="true">
-	<collection name="test" array="[]">
+	<!-- <collection name="test" array="[]">
 		<input type="checkbox" name="test" value="test1" />
 		<input type="checkbox" name="test" value="test2" />
 		<input type="checkbox" name="test" value="test3" />
@@ -10,8 +10,16 @@
 				<required>Please select at least one checkbox</required>
 			</errors>
 		</validation>
-	</collection>
-	<collection name="test2" array="[sample][]">
-		<input type="text" name="test" />
+	</collection> -->
+	<collection name="test2">
+		<input type="text" name="test[sample][]" />
+		<input type="text" name="test[sample][]" />
+		<input type="text" name="test[sample][]" />
+		<validation required="true">
+			<modifiers required-min="1" />
+			<errors>
+				<required>Please select one field</required>
+			</errors>
+		</validation>
 	</collection>
 </form>
