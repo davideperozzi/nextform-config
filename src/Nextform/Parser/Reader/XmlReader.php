@@ -163,6 +163,7 @@ class XmlReader extends AbstractReader
 			if (property_exists($validationElement, static::VALIDATION_CONNECTIONS_KEY)) {
 				$connectionsElement = $validationElement->{static::VALIDATION_CONNECTIONS_KEY};
 				$connectionActions = [];
+				$connectionErrors = [];
 
 				if ($connectionsElement->count() > 0) {
 					foreach ($connectionsElement->children() as $child) {
