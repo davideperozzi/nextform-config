@@ -25,7 +25,7 @@
     "extra": {
         "hooks": {
             "pre-commit": "php ./vendor/bin/php-cs-fixer fix --verbose",
-            "post-commit": "php ./venndor/bin/phpunit"
+            "post-commit": "php ./vendor/bin/phpunit"
         }
     }
 }
