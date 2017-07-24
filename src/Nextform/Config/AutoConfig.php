@@ -2,87 +2,87 @@
 
 namespace Nextform\Config;
 
-use Nextform\Parser\AbstractParser;
 use Nextform\Parser\Exception\LogicException;
 
 class AutoConfig extends AbstractConfig
 {
-	/**
-	 * @var string
-	 */
-	protected static $extension = '';
+    /**
+     * @var string
+     */
+    protected static $extension = '';
 
-	/**
-	 * @var AbstractConfig
-	 */
-	protected $parser = null;
+    /**
+     * @var AbstractConfig
+     */
+    protected $parser = null;
 
-	/**
-	 * @var string[]
-	 */
-	public static $parsers = [
-		'xml' => '\Nextform\Parser\XmlParser'
-	];
+    /**
+     * @var string[]
+     */
+    public static $parsers = [
+        'xml' => '\Nextform\Parser\XmlParser'
+    ];
 
-	/**
-	 * @param string $input
-	 * @param boolean $treatAsContent
-	 * @throws LogicException if treat as content is set
-	 * @throws LogicException if invalid parser given
-	 * @throws LogicException if parser not found
-	 */
-	public function __construct($input, $treatAsContent = false) {
-		if (true == $treatAsContent) {
-			// Aborting the process because recognizing
-			// the content would be too expensive.
-			throw new LogicException(
-				'You need to use a specific config if you parse content.'
-			);
-		}
-		else {
-			if ( ! is_string($input)) {
-				throw new LogicException('Invalid file given');
-			}
-			else if ( ! file_exists($input)) {
-				throw new LogicException(
-					sprintf('The file "%s" was not found', $input)
-				);
-			}
+    /**
+     * @param string $input
+     * @param boolean $treatAsContent
+     * @throws LogicException if treat as content is set
+     * @throws LogicException if invalid parser given
+     * @throws LogicException if parser not found
+     */
+    public function __construct($input, $treatAsContent = false)
+    {
+        if (true == $treatAsContent) {
+            // Aborting the process because recognizing
+            // the content would be too expensive.
+            throw new LogicException(
+                'You need to use a specific config if you parse content.'
+            );
+        }
 
-			$extension = strtolower(pathinfo($input, PATHINFO_EXTENSION));
+        if ( ! is_string($input)) {
+            throw new LogicException('Invalid file given');
+        } elseif ( ! file_exists($input)) {
+            throw new LogicException(
+                sprintf('The file "%s" was not found', $input)
+            );
+        }
 
-			if (!empty(static::$extension) && $extension != static::$extension) {
-				throw new LogicException(
-					sprintf(
-						'Invalid file extension. "%s" needed. "%s" found',
-						static::$extension,
-						$extension
-					)
-				);
-			}
+        $extension = strtolower(pathinfo($input, PATHINFO_EXTENSION));
 
-			if ( ! array_key_exists($extension, static::$parsers)) {
-				throw new LogicException(
-					sprintf('Parser for "%s" file not found', $extension)
-				);
-			}
+        if ( ! empty(static::$extension) && $extension != static::$extension) {
+            throw new LogicException(
+                sprintf(
+                    'Invalid file extension. "%s" needed. "%s" found',
+                    static::$extension,
+                    $extension
+                )
+            );
+        }
 
-			$this->setParser($extension, file_get_contents($input));
-		}
-	}
+        if ( ! array_key_exists($extension, static::$parsers)) {
+            throw new LogicException(
+                sprintf('Parser for "%s" file not found', $extension)
+            );
+        }
 
-	/**
-	 * @param string $type
-	 * @param string $input
-	 */
-	protected function setParser($type, $input) {
-		$this->parser = new static::$parsers[$type]($input);
-	}
+        $this->setParser($extension, file_get_contents($input));
+    }
 
-	/**
-	 * {@inheritDoc}
-	 */
-	public function getFields() {
-		return $this->parser->getFields();
-	}
+    /**
+     * @param string $type
+     * @param string $input
+     */
+    protected function setParser($type, $input)
+    {
+        $this->parser = new static::$parsers[$type]($input);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFields()
+    {
+        return $this->parser->getFields();
+    }
 }

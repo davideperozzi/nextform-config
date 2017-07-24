@@ -4,227 +4,241 @@ namespace Nextform\Fields;
 
 abstract class AbstractField
 {
-	const UID_SEPERATOR = '_';
+    const UID_SEPERATOR = '_';
 
-	/**
-	 * @var string
-	 */
-	const UID_PREFIX = 'field' . self::UID_SEPERATOR;
+    /**
+     * @var string
+     */
+    const UID_PREFIX = 'field' . self::UID_SEPERATOR;
 
-	/**
-	 * @var string
-	 */
-	const UID_ATTRIBUTE = 'name';
+    /**
+     * @var string
+     */
+    const UID_ATTRIBUTE = 'name';
 
-	/**
-	 * @var boolean
-	 */
-	public static $root = false;
+    /**
+     * @var boolean
+     */
+    public static $root = false;
 
-	/**
-	 * @var boolean
-	 */
-	public static $wrapper = false;
+    /**
+     * @var boolean
+     */
+    public static $wrapper = false;
 
-	/**
-	 * @var boolean
-	 */
-	public static $yield = [];
+    /**
+     * @var boolean
+     */
+    public static $yield = [];
 
-	/**
-	 * @var string
-	 */
-	public static $tag = '';
+    /**
+     * @var string
+     */
+    public static $tag = '';
 
-	/**
-	 * @var integer
-	 */
-	protected static $counter = 0;
+    /**
+     * @var integer
+     */
+    protected static $counter = 0;
 
-	/**
-	 * @var string
-	 */
-	public $id = '';
+    /**
+     * @var string
+     */
+    public $id = '';
 
-	/**
-	 * @var string
-	 */
-	protected $content = '';
+    /**
+     * @var string
+     */
+    protected $content = '';
 
-	/**
-	 * @var array
-	 */
-	protected $children = [];
+    /**
+     * @var array
+     */
+    protected $children = [];
 
-	/**
-	 * @var array
-	 */
-	protected $attributes = [];
+    /**
+     * @var array
+     */
+    protected $attributes = [];
 
-	/**
-	 * @var array
-	 */
-	protected $validation = [];
+    /**
+     * @var array
+     */
+    protected $validation = [];
 
-	/**
-	 *
-	 */
-	public function __construct() {
-		static::$counter++;
 
-		$this->id = static::generateUid();
-	}
+    public function __construct()
+    {
+        static::$counter++;
 
-	/**
-	 *
-	 */
-	public function ready() {}
+        $this->id = static::generateUid();
+    }
 
-	/**
-	 * @return string
-	 */
-	private static function generateUid() {
-		return AbstractField::UID_PREFIX . static::$counter;
-	}
 
-	/**
-	 * @param string $name
-	 * @param string $value
-	 */
-	public function setAttribute($name, $value) {
-		$this->attributes[$name] = $value;
+    public function ready()
+    {
+    }
 
-		if ($name == AbstractField::UID_ATTRIBUTE) {
-			$this->id = $value;
-		}
-	}
+    /**
+     * @return string
+     */
+    private static function generateUid()
+    {
+        return self::UID_PREFIX . static::$counter;
+    }
 
-	/**
-	 * @param string $name
-	 * @param string $value
-	 * @param string $error
-	 * @return Validation\ValidationModel
-	 */
-	public function addValidation($name, $value, $error = '') {
-		$model = new Validation\ValidationModel($name, $value);
+    /**
+     * @param string $name
+     * @param string $value
+     */
+    public function setAttribute($name, $value)
+    {
+        $this->attributes[$name] = $value;
 
-		if ( ! empty($error)) {
-			$model->error = new Validation\ErrorModel(sprintf($error, $value));
-		}
+        if ($name == self::UID_ATTRIBUTE) {
+            $this->id = $value;
+        }
+    }
 
-		$this->validation[] = $model;
+    /**
+     * @param string $name
+     * @param string $value
+     * @param string $error
+     * @return Validation\ValidationModel
+     */
+    public function addValidation($name, $value, $error = '')
+    {
+        $model = new Validation\ValidationModel($name, $value);
 
-		return $model;
-	}
+        if ( ! empty($error)) {
+            $model->error = new Validation\ErrorModel(sprintf($error, $value));
+        }
 
-	/**
-	 * @param string $name
-	 * @param string $value
-	 * @param string $action
-	 * @param string $error
-	 * @return Validation\ValidationModel
-	 */
-	public function addConnectedValidation($name, $value, $action = '', $error = '') {
-		$model = $this->addValidation($name, $value, $error);
-		$model->connection = new Validation\ConnectionModel($action);
+        $this->validation[] = $model;
 
-		return $model;
-	}
+        return $model;
+    }
 
-	/**
-	 * @param AbstractField $field
-	 */
-	public function addChild(&$field) {
-		$this->children[] = $field;
-	}
+    /**
+     * @param string $name
+     * @param string $value
+     * @param string $action
+     * @param string $error
+     * @return Validation\ValidationModel
+     */
+    public function addConnectedValidation($name, $value, $action = '', $error = '')
+    {
+        $model = $this->addValidation($name, $value, $error);
+        $model->connection = new Validation\ConnectionModel($action);
 
-	/**
-	 * @param string $content
-	 */
-	public function setContent($content) {
-		$this->content = $content;
-	}
+        return $model;
+    }
 
-	/**
-	 * @param string $name
-	 * @return array|Validation\ErrorModel
-	 */
-	public function getValidation($name = '') {
-		if ( ! empty($name)) {
-			foreach ($this->validation as $validation) {
-				if ($validation->name == $name) {
-					return $validation;
-				}
-			}
+    /**
+     * @param AbstractField $field
+     */
+    public function addChild(&$field)
+    {
+        $this->children[] = $field;
+    }
 
-			return null;
-		}
+    /**
+     * @param string $content
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+    }
 
-		return $this->validation;
-	}
+    /**
+     * @param string $name
+     * @return array|Validation\ErrorModel
+     */
+    public function getValidation($name = '')
+    {
+        if ( ! empty($name)) {
+            foreach ($this->validation as $validation) {
+                if ($validation->name == $name) {
+                    return $validation;
+                }
+            }
 
-	/**
-	 * @return array
-	 */
-	public function getAttributes() {
-		return $this->attributes;
-	}
+            return null;
+        }
 
-	/**
-	 * @return array
-	 */
-	public function getChildren() {
-		return $this->children;
-	}
+        return $this->validation;
+    }
 
-	/**
-	 * @return number
-	 */
-	public function countChildren() {
-		return count($this->children);
-	}
+    /**
+     * @return array
+     */
+    public function getAttributes()
+    {
+        return $this->attributes;
+    }
 
-	/**
-	 * @return string
-	 */
-	public function getContnet() {
-		return $this->content;
-	}
+    /**
+     * @return array
+     */
+    public function getChildren()
+    {
+        return $this->children;
+    }
 
-	/**
-	 * @return array
-	 */
-	public function getContent() {
-		return $this->content;
-	}
+    /**
+     * @return number
+     */
+    public function countChildren()
+    {
+        return count($this->children);
+    }
 
-	/**
-	 * @return boolean
-	 */
-	public function hasChildren() {
-		return count($this->children) > 0;
-	}
+    /**
+     * @return string
+     */
+    public function getContnet()
+    {
+        return $this->content;
+    }
 
-	/**
-	 * @param string $name
-	 * @return boolean
-	 */
-	public function hasAttribute($name) {
-		return array_key_exists($name, $this->attributes);
-	}
+    /**
+     * @return array
+     */
+    public function getContent()
+    {
+        return $this->content;
+    }
 
-	/**
-	 * @param string $name
-	 * @return string
-	 * @throws Exception\AttributeNotFoundException if attribute not found
-	 */
-	public function getAttribute($name) {
-		if ( ! $this->hasAttribute($name))	{
-			throw new Exception\AttributeNotFoundException(
-				sprintf('Attribute "%s" not found', $name)
-			);
-		}
+    /**
+     * @return boolean
+     */
+    public function hasChildren()
+    {
+        return count($this->children) > 0;
+    }
 
-		return $this->attributes[$name];
-	}
+    /**
+     * @param string $name
+     * @return boolean
+     */
+    public function hasAttribute($name)
+    {
+        return array_key_exists($name, $this->attributes);
+    }
+
+    /**
+     * @param string $name
+     * @throws Exception\AttributeNotFoundException if attribute not found
+     * @return string
+     */
+    public function getAttribute($name)
+    {
+        if ( ! $this->hasAttribute($name)) {
+            throw new Exception\AttributeNotFoundException(
+                sprintf('Attribute "%s" not found', $name)
+            );
+        }
+
+        return $this->attributes[$name];
+    }
 }

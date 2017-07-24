@@ -4,8 +4,8 @@ namespace Nextform\Config;
 
 abstract class AbstractConfig
 {
-	/**
-	 * @return array
-	 */
-	abstract public function getFields();
+    /**
+     * @return array
+     */
+    abstract public function getFields();
 }
