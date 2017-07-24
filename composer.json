@@ -18,9 +18,9 @@
     },
     "minimum-stability": "beta",
     "require-dev": {
-        "phpunit/phpunit": "~6.0",
         "friendsofphp/php-cs-fixer": "^2.4",
-        "brainmaestro/composer-git-hooks": "^2.2"
+        "brainmaestro/composer-git-hooks": "^2.2",
+        "phpunit/phpunit": "^5.7"
     },
     "extra": {
         "hooks": {
