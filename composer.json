@@ -27,5 +27,9 @@
             "pre-commit": "php ./vendor/bin/php-cs-fixer fix --verbose",
             "post-commit": "php ./vendor/bin/phpunit"
         }
+    },
+    "scripts": {
+        "post-install-cmd": "php ./vendor/bin/cghooks add --ignore-lock",
+        "post-update-cmd": "php ./vendor/bin/cghooks update"
     }
 }
