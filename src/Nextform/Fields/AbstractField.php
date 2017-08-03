@@ -66,6 +66,11 @@ abstract class AbstractField
      */
     protected $validation = [];
 
+    /**
+     * @var array
+     */
+    protected $changeCallbacks = [];
+
 
     public function __construct()
     {
@@ -74,9 +79,26 @@ abstract class AbstractField
         $this->id = static::generateUid();
     }
 
-
     public function ready()
     {
+    }
+
+    /**
+     * @param callable $callback
+     * @return self
+     */
+    public function onChange(callable $callback)
+    {
+        $this->changeCallbacks[] = $callback;
+
+        return $this;
+    }
+
+    private function triggerChange()
+    {
+        foreach ($this->changeCallbacks as $callback) {
+            $callback();
+        }
     }
 
     /**
@@ -98,6 +120,8 @@ abstract class AbstractField
         if ($name == self::UID_ATTRIBUTE) {
             $this->id = $value;
         }
+
+        $this->triggerChange();
     }
 
     /**
@@ -116,6 +140,8 @@ abstract class AbstractField
 
         $this->validation[] = $model;
 
+        $this->triggerChange();
+
         return $model;
     }
 
@@ -131,6 +157,8 @@ abstract class AbstractField
         $model = $this->addValidation($name, $value, $error);
         $model->connection = new Validation\ConnectionModel($action);
 
+        $this->triggerChange();
+
         return $model;
     }
 
@@ -140,6 +168,8 @@ abstract class AbstractField
     public function addChild(&$field)
     {
         $this->children[] = $field;
+
+        $this->triggerChange();
     }
 
     /**
@@ -148,6 +178,8 @@ abstract class AbstractField
     public function setContent($content)
     {
         $this->content = $content;
+
+        $this->triggerChange();
     }
 
     /**
