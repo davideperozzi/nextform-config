@@ -79,7 +79,6 @@ class ConfigTest extends TestCase
         new XmlConfig('<form></form>', true);
     }
 
-
     public function testXmlConfigValidContentInput()
     {
         $config = new XmlConfig(file_get_contents($this->validXmlFile), true);
@@ -87,14 +86,12 @@ class ConfigTest extends TestCase
         $this->assertTrue($config->getFields() instanceof FieldCollection);
     }
 
-
     public function testAutoConfigFieldsIsCollection()
     {
         $config = new AutoConfig($this->validXmlFile);
 
         $this->assertTrue($config->getFields() instanceof FieldCollection);
     }
-
 
     public function testXmlConfigFieldsIsCollection()
     {
@@ -113,7 +110,6 @@ class ConfigTest extends TestCase
         return $xmlConfig->getFields();
     }
 
-
     public function testXmlConfigFieldsValidField()
     {
         $fields = $this->getXmlConfigFields();
@@ -123,14 +119,12 @@ class ConfigTest extends TestCase
         $this->assertTrue($fields->get('description') instanceof TextareaField);
     }
 
-
     public function testXmlConfigFieldsInvalidField()
     {
         $fields = $this->getXmlConfigFields();
 
         $this->assertTrue(is_null($fields->get('invalidfield')));
     }
-
 
     public function testXmlConfigFieldsValidFieldAttributeType()
     {
@@ -139,7 +133,6 @@ class ConfigTest extends TestCase
 
         $this->assertTrue(is_string($firstname->getAttribute('type')));
     }
-
 
     public function testXmlConfigFieldsValidFieldAttributeValue()
     {
@@ -163,7 +156,6 @@ class ConfigTest extends TestCase
         $description->getAttribute('invalidattribute');
     }
 
-
     public function testXmlConfigValidationFieldExistence()
     {
         $fields = $this->getXmlConfigFields();
@@ -173,7 +165,6 @@ class ConfigTest extends TestCase
         $this->assertTrue($firstname->getValidation('required') instanceof ValidationModel);
         $this->assertTrue($description->getValidation('required') instanceof ValidationModel);
     }
-
 
     public function testXmlConfigValidationFieldErrorMessage()
     {
@@ -195,7 +186,6 @@ class ConfigTest extends TestCase
         );
     }
 
-
     public function testXmlConfigConnectedField()
     {
         $fields = $this->getXmlConfigFields();
@@ -210,7 +200,6 @@ class ConfigTest extends TestCase
 
         $this->assertEquals($connectionCounter, 2);
     }
-
 
     public function testXmlConfigConnectedFieldValues()
     {
@@ -234,7 +223,6 @@ class ConfigTest extends TestCase
         }
     }
 
-
     public function testXmlConfigTraversable()
     {
         $fields = $this->getXmlConfigFields();
@@ -244,14 +232,12 @@ class ConfigTest extends TestCase
         }
     }
 
-
     public function testXmlConfigCountable()
     {
         $fields = $this->getXmlConfigFields();
 
         $this->assertEquals(3, count($fields));
     }
-
 
     public function testXmlConfigRootNode()
     {
@@ -260,7 +246,6 @@ class ConfigTest extends TestCase
         $this->assertTrue($fields->getRoot() instanceof FormField);
         $this->assertEquals('test.php', $fields->getRoot()->getAttribute('action'));
     }
-
 
     public function testXmlConfigYieldChildrenLayerOne()
     {
@@ -273,7 +258,6 @@ class ConfigTest extends TestCase
         $this->assertTrue($selectField->hasChildren());
     }
 
-
     public function testXmlConfigYieldChildrenLayerOneContent()
     {
         $xmlConfig = new XmlConfig($this->validXmlFileSelect);
@@ -284,7 +268,6 @@ class ConfigTest extends TestCase
             $this->assertTrue( ! empty($child->getContent()));
         }
     }
-
 
     public function testXmlConfigYieldChildrenLayerOneAttribute()
     {
@@ -297,6 +280,18 @@ class ConfigTest extends TestCase
         }
     }
 
+    public function testRemoveFieldAttribute()
+    {
+        $xmlConfig = new XmlConfig($this->validXmlFileSelect);
+        $xmlFields = $xmlConfig->getFields();
+        $genderField = $xmlFields->get('gender');
+
+        $genderField->setAttribute('test', '1');
+        $this->assertTrue($genderField->hasAttribute('test'));
+
+        $this->assertTrue($genderField->removeAttribute('test'));
+        $this->assertFalse($genderField->hasAttribute('test'));
+    }
 
     // public function testXmlConfigArrayField() {
     // 	$xmlConfig = new XmlConfig($this->validXmlFileArrays);

@@ -126,6 +126,21 @@ abstract class AbstractField
 
     /**
      * @param string $name
+     * @return boolean
+     */
+    public function removeAttribute($name)
+    {
+        $found = array_key_exists($name, $this->attributes);
+
+        if (true == $found) {
+            unset($this->attributes[$name]);
+        }
+
+        return $found;
+    }
+
+    /**
+     * @param string $name
      * @param string $value
      * @param string $error
      * @return Validation\ValidationModel
