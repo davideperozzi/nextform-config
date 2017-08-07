@@ -134,6 +134,7 @@ abstract class AbstractField
 
         if (true == $found) {
             unset($this->attributes[$name]);
+            $this->triggerChange();
         }
 
         return $found;
