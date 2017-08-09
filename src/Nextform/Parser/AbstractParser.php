@@ -18,6 +18,11 @@ abstract class AbstractParser
     protected $fieldCollection;
 
     /**
+     * @var array
+     */
+    protected $additionalFields = [];
+
+    /**
      * @var AbstractReader
      */
     protected $reader;
@@ -46,6 +51,30 @@ abstract class AbstractParser
             );
         }
 
-        return $this->fieldCollection;
+        return $this->fieldCollection->with($this->additionalFields);
+    }
+
+    /**
+     * @param AbstractField $field
+     */
+    public function addField($field)
+    {
+        $this->additionalFields[] = $field;
+    }
+
+    /**
+     * @param AbstractField $field
+     * @return boolean
+     */
+    public function removeField($field)
+    {
+        return array_splice(
+            $this->additionalFields,
+            array_search(
+                $field,
+                $this->additionalFields
+            ),
+            1
+        );
     }
 }

@@ -5,7 +5,6 @@ namespace Nextform\Parser\Tests;
 use NextForm\Config\AutoConfig;
 use Nextform\Config\XmlConfig;
 use Nextform\Fields\AbstractField;
-use Nextform\Fields\CollectionField;
 use Nextform\Fields\FormField;
 use Nextform\Fields\InputField;
 use Nextform\Fields\TextareaField;
@@ -293,71 +292,16 @@ class ConfigTest extends TestCase
         $this->assertFalse($genderField->hasAttribute('test'));
     }
 
-    // public function testXmlConfigArrayField() {
-    // 	$xmlConfig = new XmlConfig($this->validXmlFileArrays);
-    // 	$xmlFields = $xmlConfig->getFields();
-    // 	$collection = $xmlFields->get('test');
-    // 	$validation = $collection->getValidation();
+    public function testAddFieldFunction()
+    {
+        $xmlConfig = new XmlConfig($this->validXmlFileSelect);
+        $inputField = new InputField();
+        $inputField->setAttribute('name', 'addtest');
 
-    // 	$this->assertInstanceOf(CollectionField::class, $collection);
-    // 	$this->assertEquals($collection->countChildren(), 3);
-    // 	$this->assertEquals(count($validation), 1);
-    // 	$this->assertEquals($validation[0]->name, 'required');
-    // 	$this->assertEquals($validation[0]->error, 'Please select at least one checkbox');
+        $xmlConfig->addField($inputField);
+        $this->assertTrue($xmlConfig->getFields()->get('addtest') instanceof InputField);
 
-    // 	foreach ($collection->getChildren() as $i => $child) {
-    // 		$this->assertEquals($child->id, 'test' . AbstractField::UID_SEPERATOR . $i);
-    // 	}
-    // }
-
-
-    // public function testXmlConfigArrayStructure() {
-    // 	$xmlConfig = new XmlConfig($this->validXmlFileArrays);
-    // 	$xmlFields = $xmlConfig->getFields();
-    // 	$collection = $xmlFields->get('test2');
-
-    // 	$this->assertEquals(
-    // 		$collection->getArrayStructure(),
-    // 		[
-    // 			'sample' => [
-    // 				0 => []
-    // 			]
-    // 		]
-    // 	);
-    // }
-
-
-    // public function testXmlConfigArrayModifier() {
-    // 	$xmlConfig = new XmlConfig($this->validXmlFileArrays);
-    // 	$xmlFields = $xmlConfig->getFields();
-    // 	$collection = $xmlFields->get('test');
-    // 	$validations = $collection->getValidation();
-
-    // 	$this->assertTrue(array_key_exists('min', $validations[0]->modifiers));
-    // 	$this->assertEquals($validations[0]->modifiers['min'], '2');
-    // }
-
-    /**
-     * @expectedException Nextform\Fields\Exception\AttributeNotFoundException
-     * @expectedExceptionMessage The collection field needs a array destination for the subfields
-     */
-    // public function testXmlConfigUndefinedCollectionFieldArrayDefinition() {
-    // 	$xmlConig = new XmlConfig('
-    // 		<form name="test">
-    // 			<collection></collection>
-    // 		</form>
-    // 	', true);
-    // }
-
-    /**
-     * @expectedException Nextform\Fields\Exception\InvalidArrayDestinationException
-     * @expectedExceptionMessage The collection field needs a valid array destination
-     */
-    // public function testXmlConfigInvalidCollectionFieldArrayDefinition() {
-    // 	$xmlConig = new XmlConfig('
-    // 		<form name="test">
-    // 			<collection array=""></collection>
-    // 		</form>
-    // 	', true);
-    // }
+        $xmlConfig->removeField($inputField);
+        $this->assertFalse($xmlConfig->getFields()->get('addtest') instanceof InputField);
+    }
 }

@@ -2,6 +2,7 @@
 
 namespace Nextform\Config;
 
+use Nextform\Fields\AbstractField;
 use Nextform\Parser\Exception\LogicException;
 
 class AutoConfig extends AbstractConfig
@@ -84,5 +85,21 @@ class AutoConfig extends AbstractConfig
     public function getFields()
     {
         return $this->parser->getFields();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addField(AbstractField &$field)
+    {
+        $this->parser->addField($field);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeField(AbstractField &$field)
+    {
+        return $this->parser->removeField($field);
     }
 }

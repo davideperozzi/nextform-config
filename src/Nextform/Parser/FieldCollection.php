@@ -101,4 +101,17 @@ class FieldCollection implements Traversable
 
         return null;
     }
+
+    /**
+     * @param array $fields
+     * @return FieldCollection
+     */
+    public function with(array $fields)
+    {
+        return new self(array_merge(
+            [$this->root],
+            $this->fields,
+            $fields
+        ));
+    }
 }
