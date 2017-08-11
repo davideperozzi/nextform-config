@@ -4,6 +4,9 @@ namespace Nextform\Fields;
 
 abstract class AbstractField
 {
+    /**
+     * @var string
+     */
     const UID_SEPERATOR = '_';
 
     /**
@@ -15,6 +18,16 @@ abstract class AbstractField
      * @var string
      */
     const UID_ATTRIBUTE = 'name';
+
+    /**
+     * @var string
+     */
+    public $id = '';
+
+    /**
+     * @var integer
+     */
+    protected static $counter = 0;
 
     /**
      * @var boolean
@@ -37,14 +50,9 @@ abstract class AbstractField
     public static $tag = '';
 
     /**
-     * @var integer
+     * @var boolean
      */
-    protected static $counter = 0;
-
-    /**
-     * @var string
-     */
-    public $id = '';
+    protected $ghost = false;
 
     /**
      * @var string
@@ -70,7 +78,6 @@ abstract class AbstractField
      * @var array
      */
     protected $changeCallbacks = [];
-
 
     public function __construct()
     {
@@ -112,6 +119,7 @@ abstract class AbstractField
     /**
      * @param string $name
      * @param string $value
+     * @return self
      */
     public function setAttribute($name, $value)
     {
@@ -122,6 +130,8 @@ abstract class AbstractField
         }
 
         $this->triggerChange();
+
+        return $this;
     }
 
     /**
@@ -180,22 +190,39 @@ abstract class AbstractField
 
     /**
      * @param AbstractField $field
+     * @return self
      */
     public function addChild(&$field)
     {
         $this->children[] = $field;
 
         $this->triggerChange();
+
+        return $this;
     }
 
     /**
      * @param string $content
+     * @return self
      */
     public function setContent($content)
     {
         $this->content = $content;
 
         $this->triggerChange();
+
+        return $this;
+    }
+
+    /**
+     * @param boolean $enabled
+     * @return self
+     */
+    public function setGhost($enabled)
+    {
+        $this->ghost = $enabled;
+
+        return $this;
     }
 
     /**
@@ -263,6 +290,14 @@ abstract class AbstractField
     public function hasChildren()
     {
         return count($this->children) > 0;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isGhost()
+    {
+        return $this->ghost;
     }
 
     /**
