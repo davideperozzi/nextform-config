@@ -96,6 +96,10 @@ abstract class AbstractField
      */
     public function getSignature()
     {
+        if ($this->ghost) {
+            return '';
+        }
+
         $class = get_class($this);
         $str = $this->generateSignature($this->id, $class::$tag);
 
