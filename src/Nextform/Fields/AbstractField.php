@@ -358,11 +358,10 @@ abstract class AbstractField
             if ( ! is_null($fallbackVal)) {
                 return $fallbackVal;
             }
-            else {
-                throw new Exception\AttributeNotFoundException(
+
+            throw new Exception\AttributeNotFoundException(
                     sprintf('Attribute "%s" not found', $name)
                 );
-            }
         }
 
         return $this->attributes[$name];
