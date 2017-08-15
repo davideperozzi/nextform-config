@@ -310,7 +310,7 @@ class ConfigTest extends TestCase
     {
         $xmlConfig = new XmlConfig($this->validXmlFileSelect);
 
-        $this->assertEquals(Signature::get($xmlConfig), '6455f11cf41c9540152452975b86fa3d');
+        $this->assertEquals(Signature::get($xmlConfig), 'eeda3598b61b3a47fd456b1727574674');
 
         // Test with ghost field
         $ghostField = new InputField();
@@ -318,9 +318,9 @@ class ConfigTest extends TestCase
         $ghostField->setGhost(true);
 
         $xmlConfig->addField($ghostField);
-        $this->assertEquals(Signature::get($xmlConfig), '6455f11cf41c9540152452975b86fa3d');
+        $this->assertEquals(Signature::get($xmlConfig), 'eeda3598b61b3a47fd456b1727574674');
 
         $ghostField->setGhost(false);
-        $this->assertEquals(Signature::get($xmlConfig), 'e72d563618215f929aa8f954a2c6ec7e');
+        $this->assertEquals(Signature::get($xmlConfig), '3debdf6dc41ee2805083a142bd43651d');
     }
 }

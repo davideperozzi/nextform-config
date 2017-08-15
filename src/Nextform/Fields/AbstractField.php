@@ -101,24 +101,26 @@ abstract class AbstractField
         }
 
         $class = get_class($this);
-        $str = $this->generateSignature($this->id, $class::$tag);
+        $uid = $this->getAttribute(self::UID_ATTRIBUTE, '');
+        $str = $this->generateSignature($uid, $class::$tag);
 
         foreach ($this->children as $child) {
             $class = get_class($child);
-            $str .= $this->generateSignature($child->id, $class::$tag);
+            $uid = $child->getAttribute(self::UID_ATTRIBUTE, '');
+            $str .= $this->generateSignature($uid, $class::$tag);
         }
 
         return $str;
     }
 
     /**
-     * @param string $id
+     * @param string $name
      * @param string $tag
      * @return string
      */
-    private function generateSignature($id, $tag)
+    private function generateSignature($name, $tag)
     {
-        return $tag . self::SIGNATURE_SEPERATOR . $id;
+        return $tag . self::SIGNATURE_SEPERATOR . $name;
     }
 
     public function ready()
@@ -346,15 +348,21 @@ abstract class AbstractField
 
     /**
      * @param string $name
+     * @param string|null $fallbackVal
      * @throws Exception\AttributeNotFoundException if attribute not found
      * @return string
      */
-    public function getAttribute($name)
+    public function getAttribute($name, $fallbackVal = null)
     {
         if ( ! $this->hasAttribute($name)) {
-            throw new Exception\AttributeNotFoundException(
-                sprintf('Attribute "%s" not found', $name)
-            );
+            if ( ! is_null($fallbackVal)) {
+                return $fallbackVal;
+            }
+            else {
+                throw new Exception\AttributeNotFoundException(
+                    sprintf('Attribute "%s" not found', $name)
+                );
+            }
         }
 
         return $this->attributes[$name];
