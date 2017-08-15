@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf8" ?>
 <form name="sample" action="test.php" novalidate="true">
-	<!-- <collection name="test" array="[]">
-		<input type="checkbox" name="test" value="test1" />
-		<input type="checkbox" name="test" value="test2" />
-		<input type="checkbox" name="test" value="test3" />
+	<!-- <collection name="test2" array="[]">
+		<input type="checkbox" name="test2" value="test1" />
+		<input type="checkbox" name="test2" value="test2" />
+		<input type="checkbox" name="test2" value="test3" />
 		<validation required="true">
 			<modifiers required-min="2" />
 			<errors>

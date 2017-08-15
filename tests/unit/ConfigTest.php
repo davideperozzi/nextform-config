@@ -3,6 +3,7 @@
 namespace Nextform\Parser\Tests;
 
 use NextForm\Config\AutoConfig;
+use Nextform\Config\Signature;
 use Nextform\Config\XmlConfig;
 use Nextform\Fields\AbstractField;
 use Nextform\Fields\FormField;
@@ -303,5 +304,12 @@ class ConfigTest extends TestCase
 
         $xmlConfig->removeField($inputField);
         $this->assertFalse($xmlConfig->getFields()->get('addtest') instanceof InputField);
+    }
+
+    public function testSignatureGeneration()
+    {
+        $xmlConfig = new XmlConfig($this->validXmlFileSelect);
+
+        $this->assertEquals(Signature::get($xmlConfig), '6455f11cf41c9540152452975b86fa3d');
     }
 }

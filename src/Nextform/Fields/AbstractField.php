@@ -22,6 +22,11 @@ abstract class AbstractField
     /**
      * @var string
      */
+    const SIGNATURE_SEPERATOR = '_';
+
+    /**
+     * @var string
+     */
     public $id = '';
 
     /**
@@ -84,6 +89,32 @@ abstract class AbstractField
         static::$counter++;
 
         $this->id = static::generateUid();
+    }
+
+    /**
+     * @return string
+     */
+    public function getSignature()
+    {
+        $class = get_class($this);
+        $str = $this->generateSignature($this->id, $class::$tag);
+
+        foreach ($this->children as $child) {
+            $class = get_class($child);
+            $str .= $this->generateSignature($child->id, $class::$tag);
+        }
+
+        return $str;
+    }
+
+    /**
+     * @param string $id
+     * @param string $tag
+     * @return string
+     */
+    private function generateSignature($id, $tag)
+    {
+        return $tag . self::SIGNATURE_SEPERATOR . $id;
     }
 
     public function ready()
