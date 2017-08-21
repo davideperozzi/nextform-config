@@ -60,6 +60,11 @@ abstract class AbstractField
     protected $ghost = false;
 
     /**
+     * @var boolean
+     */
+    protected $dynamic = false;
+
+    /**
      * @var string
      */
     protected $content = '';
@@ -104,10 +109,12 @@ abstract class AbstractField
         $uid = $this->getAttribute(self::UID_ATTRIBUTE, '');
         $str = $this->generateSignature($uid, $class::$tag);
 
-        foreach ($this->children as $child) {
-            $class = get_class($child);
-            $uid = $child->getAttribute(self::UID_ATTRIBUTE, '');
-            $str .= $this->generateSignature($uid, $class::$tag);
+        if (false == $this->dynamic) {
+            foreach ($this->children as $child) {
+                $class = get_class($child);
+                $uid = $child->getAttribute(self::UID_ATTRIBUTE, '');
+                $str .= $this->generateSignature($uid, $class::$tag);
+            }
         }
 
         return $str;
@@ -263,6 +270,17 @@ abstract class AbstractField
     }
 
     /**
+     * @param boolean $enabled
+     * @return self
+     */
+    public function setDynamic($enabled)
+    {
+        $this->dynamic = $enabled;
+
+        return $this;
+    }
+
+    /**
      * @param string $name
      * @return array|Validation\ErrorModel
      */
@@ -335,6 +353,14 @@ abstract class AbstractField
     public function isGhost()
     {
         return $this->ghost;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isDynamic()
+    {
+        return $this->dynamic;
     }
 
     /**
