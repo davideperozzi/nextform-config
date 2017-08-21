@@ -323,4 +323,24 @@ class ConfigTest extends TestCase
         $ghostField->setGhost(false);
         $this->assertEquals(Signature::get($xmlConfig), '3debdf6dc41ee2805083a142bd43651d');
     }
+
+    public function testSignatureDynamicGeneration()
+    {
+        $xmlConfig = new XmlConfig($this->validXmlFileArrays);
+        $collection = $xmlConfig->getFields()->get('test');
+
+        $this->assertEquals(Signature::get($xmlConfig), 'eb64d03c8a8ed7b4dffcb723d6b7e2cc');
+
+        $field = new InputField();
+        $field->setAttribute('name', $collection->getAttribute('name') . '[]');
+
+        $collection->setDynamic(true);
+        $this->assertEquals(Signature::get($xmlConfig), '50fc75f2124bffedd65e22dd53f5f833');
+
+        $collection->addChild($field);
+        $this->assertEquals(Signature::get($xmlConfig), '50fc75f2124bffedd65e22dd53f5f833');
+
+        $collection->setDynamic(false);
+        $this->assertEquals(Signature::get($xmlConfig), '4bacdd2b9d2807f71ffac7fb5a13b075');
+    }
 }

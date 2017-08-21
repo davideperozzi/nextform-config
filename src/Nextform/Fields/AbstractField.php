@@ -111,9 +111,7 @@ abstract class AbstractField
 
         if (false == $this->dynamic) {
             foreach ($this->children as $child) {
-                $class = get_class($child);
-                $uid = $child->getAttribute(self::UID_ATTRIBUTE, '');
-                $str .= $this->generateSignature($uid, $class::$tag);
+                $str .= $child->getSignature();
             }
         }
 
