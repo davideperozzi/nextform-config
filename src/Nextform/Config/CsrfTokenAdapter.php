@@ -31,7 +31,7 @@ trait CsrfTokenAdapter
      * @param boolean $enabled
      * @return self
      */
-    public function enableCsrfToken($enabled)
+    public function enableCsrfToken($enabled = true)
     {
         $this->csrfTokenEnabled = $enabled;
 
@@ -52,6 +52,14 @@ trait CsrfTokenAdapter
         }
 
         return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function isCsrfTokenEnabled()
+    {
+        return $this->csrfTokenEnabled;
     }
 
     /**
