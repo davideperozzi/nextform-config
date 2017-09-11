@@ -6,6 +6,8 @@ use Nextform\Fields\AbstractField;
 
 abstract class AbstractConfig
 {
+    use CsrfTokenAdapter;
+
     /**
      * @return array
      */

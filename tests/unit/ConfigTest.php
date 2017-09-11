@@ -343,4 +343,27 @@ class ConfigTest extends TestCase
         $collection->setDynamic(false);
         $this->assertEquals(Signature::get($xmlConfig), '4bacdd2b9d2807f71ffac7fb5a13b075');
     }
+
+    public function testCsrfTokenTrait()
+    {
+        $config = new XmlConfig($this->validXmlFile);
+
+        $this->assertNull($config->getCsrfTokenManager());
+
+        $config->enableCsrfToken(true);
+        $this->assertTrue(
+            $config->getCsrfTokenManager() instanceof \Nextform\Security\Csrf\TokenManager
+        );
+
+        $config->enableCsrfToken(false);
+        $this->assertNull($config->getCsrfTokenManager());
+
+        $config->enableCsrfToken(true);
+        $this->assertTrue($config->getCsrfTokenField() instanceof InputField);
+
+        $manager = $config->getCsrfTokenManager();
+        $field = $config->getCsrfTokenField();
+        $token = $manager->getToken($config->getCsrfTokenFieldNameUid());
+        $this->assertEquals($field->getAttribute('value'), $token->value);
+    }
 }

@@ -30,5 +30,8 @@
     "scripts": {
         "post-install-cmd": "php ./vendor/bin/cghooks add --ignore-lock",
         "post-update-cmd": "php ./vendor/bin/cghooks update"
+    },
+    "require": {
+        "davideperozzi/nextform-security": "^1.0"
     }
 }
