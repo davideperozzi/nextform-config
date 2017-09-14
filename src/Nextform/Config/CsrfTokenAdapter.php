@@ -82,6 +82,7 @@ trait CsrfTokenAdapter
 
         $headers = getallheaders();
         $tokenManager = $this->csrfTokenManager;
+        $fieldName = $this->getCsrfTokenFieldName();
         $inputToken = null;
 
         if (array_key_exists($this->csrfTokenHeaderName, $headers)) {
