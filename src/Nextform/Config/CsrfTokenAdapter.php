@@ -15,7 +15,7 @@ trait CsrfTokenAdapter
     /**
      * @var string
      */
-    private $csrfTokenHeaderName = 'X-CSRF-Token';
+    private $csrfTokenHeaderNames = ['X-CSRF-Token', 'X-Csrf-Token'];
 
     /**
      * @var string
@@ -83,12 +83,22 @@ trait CsrfTokenAdapter
         $headers = getallheaders();
         $tokenManager = $this->csrfTokenManager;
         $fieldName = $this->getCsrfTokenFieldName();
+        $useHeader = false;
+        $headerName = '';
         $inputToken = null;
 
-        if (array_key_exists($this->csrfTokenHeaderName, $headers)) {
+        foreach ($this->csrfTokenHeaderNames as $name) {
+            if (array_key_exists($name, $headers)) {
+                $useHeader = true;
+                $headerName = $name;
+                break;
+            }
+        }
+
+        if (true == $useHeader) {
             list($tokenId, $tokenValue) = explode(
                 $this->csrfTokenHeaderSeparator,
-                $headers[$this->csrfTokenHeaderName]
+                $headers[$headerName]
             );
 
             $inputToken = $tokenManager->createToken($tokenId, $tokenValue);
