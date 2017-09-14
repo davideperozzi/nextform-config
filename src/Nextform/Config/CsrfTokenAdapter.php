@@ -78,8 +78,7 @@ trait CsrfTokenAdapter
 
         if (array_key_exists($fieldName, $headers)) {
             $inputToken = $tokenManager->createToken($tokenId, $headers[$fieldName]);
-        }
-        else if (array_key_exists($fieldName, $input)) {
+        } elseif (array_key_exists($fieldName, $input)) {
             $inputToken = $tokenManager->createToken($tokenId, $input[$fieldName]);
         }
 
