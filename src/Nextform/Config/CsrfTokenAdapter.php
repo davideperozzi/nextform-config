@@ -13,6 +13,16 @@ trait CsrfTokenAdapter
     private $csrfTokenFieldName = 'nextform_csrf_token_';
 
     /**
+     * @var string
+     */
+    private $csrfTokenHeaderName = 'X-CSRF-Token';
+
+    /**
+     * @var string
+     */
+    private $csrfTokenHeaderSeparator = ':';
+
+    /**
      * @var boolean
      */
     private $csrfTokenEnabled = false;
@@ -71,14 +81,19 @@ trait CsrfTokenAdapter
         }
 
         $headers = getallheaders();
-        $tokenId = $this->getCsrfTokenFieldNameUid();
-        $fieldName = $this->getCsrfTokenFieldName();
         $tokenManager = $this->csrfTokenManager;
         $inputToken = null;
 
-        if (array_key_exists($fieldName, $headers)) {
-            $inputToken = $tokenManager->createToken($tokenId, $headers[$fieldName]);
+        if (array_key_exists($this->csrfTokenHeaderName, $headers)) {
+            list($tokenId, $tokenValue) = explode(
+                $this->csrfTokenHeaderSeparator,
+                $headers[$this->csrfTokenHeaderName]
+            );
+
+            $inputToken = $tokenManager->createToken($tokenId, $tokenValue);
         } elseif (array_key_exists($fieldName, $input)) {
+            $tokenId = $this->getCsrfTokenFieldNameUid();
+            $fieldName = $this->getCsrfTokenFieldName();
             $inputToken = $tokenManager->createToken($tokenId, $input[$fieldName]);
         }
 
