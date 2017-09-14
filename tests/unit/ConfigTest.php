@@ -344,7 +344,7 @@ class ConfigTest extends TestCase
         $this->assertEquals(Signature::get($xmlConfig), '4bacdd2b9d2807f71ffac7fb5a13b075');
     }
 
-    public function testCsrfTokenTrait()
+    public function testCsrfTokenAdapater()
     {
         $config = new XmlConfig($this->validXmlFile);
 

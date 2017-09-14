@@ -10,7 +10,7 @@ trait CsrfTokenAdapter
     /**
      * @var string
      */
-    private $csrfFieldName = 'nextform_csrf_token_';
+    private $csrfTokenFieldName = 'nextform_csrf_token_';
 
     /**
      * @var boolean
@@ -29,7 +29,7 @@ trait CsrfTokenAdapter
 
     /**
      * @param boolean $enabled
-     * @return self
+     * @return Nextform\Security\Csrf\Model\TokenModel
      */
     public function enableCsrfToken($enabled = true)
     {
@@ -42,16 +42,48 @@ trait CsrfTokenAdapter
             $token = $this->csrfTokenManager->getToken($this->getCsrfTokenFieldNameUid());
 
             $this->csrfTokenField->setGhost(true);
+            $this->csrfTokenField->setAttribute('hidden', '1');
             $this->csrfTokenField->setAttribute('name', $this->getCsrfTokenFieldName());
             $this->csrfTokenField->setAttribute('value', $token->value);
 
             $this->addField($this->csrfTokenField);
+
+            return $token;
         } elseif ($this->csrfTokenField instanceof InputField) {
+            $this->csrfTokenManager->deleteToken($this->getCsrfTokenFieldNameUid());
             $this->csrfTokenManager = null;
+
             $this->removeField($this->csrfTokenField);
+            $this->csrfTokenField = null;
         }
 
-        return $this;
+        return null;
+    }
+
+    /**
+     * @param array $input
+     * @return boolean
+     */
+    public function checkCsrfToken($input = [])
+    {
+        if ( ! $this->csrfTokenEnabled) {
+            return true;
+        }
+
+        $headers = getallheaders();
+        $tokenId = $this->getCsrfTokenFieldNameUid();
+        $fieldName = $this->getCsrfTokenFieldName();
+        $tokenManager = $this->csrfTokenManager;
+        $inputToken = null;
+
+        if (array_key_exists($fieldName, $headers)) {
+            $inputToken = $tokenManager->createToken($tokenId, $headers[$fieldName]);
+        }
+        else if (array_key_exists($fieldName, $input)) {
+            $inputToken = $tokenManager->createToken($tokenId, $input[$fieldName]);
+        }
+
+        return $inputToken ? $tokenManager->isValidToken($inputToken) : false;
     }
 
     /**
@@ -83,7 +115,7 @@ trait CsrfTokenAdapter
      */
     public function getCsrfTokenFieldName()
     {
-        return $this->csrfFieldName . $this->getCsrfTokenFieldNameUid();
+        return $this->csrfTokenFieldName . $this->getCsrfTokenFieldNameUid();
     }
 
     /**
