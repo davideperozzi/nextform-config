@@ -32,6 +32,6 @@
         "post-update-cmd": "php ./vendor/bin/cghooks update"
     },
     "require": {
-        "davideperozzi/nextform-security": "^1.0"
+        "davideperozzi/nextform-security": "dev-dev"
     }
 }
